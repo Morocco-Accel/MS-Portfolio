@@ -1,0 +1,41 @@
+{
+  "nav": {
+    "brand": "Portafolio",
+    "home": "Inicio",
+    "about": "Sobre mí",
+    "projects": "Proyectos",
+    "skills": "Habilidades",
+    "contact": "Contacto"
+  },
+  "home": {
+    "eyebrow": "Bienvenido",
+    "title": "Hola, construyo cosas en la web.",
+    "description": "Este es el punto de partida de mi portafolio. Echa un vistazo a mis proyectos, habilidades y ponte en contacto.",
+    "projectsCta": "Ver proyectos",
+    "contactCta": "Contáctame",
+    "techTitle": "Tecnologías que utilizo"
+  },
+  "about": {
+    "title": "Sobre mí",
+    "description": "Aquí va una breve biografía — quién eres, a qué te dedicas y qué te importa."
+  },
+  "projects": {
+    "title": "Proyectos",
+    "items": [
+      { "title": "Proyecto Uno", "description": "Una breve descripción del proyecto." },
+      { "title": "Proyecto Dos", "description": "Una breve descripción del proyecto." }
+    ]
+  },
+  "skills": {
+    "title": "Habilidades"
+  },
+  "contact": {
+    "title": "Contacto",
+    "description": "¿Quieres ponerte en contacto? Escríbeme a",
+    "email": "hello@example.com"
+  },
+  "footer": {
+    "brand": "Portafolio",
+    "rights": "Todos los derechos reservados."
+  }
+}
