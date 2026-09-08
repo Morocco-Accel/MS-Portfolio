@@ -82,30 +82,56 @@ function Card({
   url,
   ...props
 }: { url: string } & Pick<ThreeElements["mesh"], "position" | "rotation">) {
-  const ref = useRef<THREE.Mesh>(null!);
+  const groupRef = useRef<THREE.Group>(null!);
+  const frontRef = useRef<THREE.Mesh>(null!);
+  const backRef = useRef<THREE.Mesh>(null!);
   const [hovered, hover] = useState(false);
   const pointerOver = (e: ThreeEvent<PointerEvent>) => (
     e.stopPropagation(), hover(true)
   );
   const pointerOut = () => hover(false);
   useFrame((state, delta) => {
-    easing.damp3(ref.current.scale, hovered ? 1.15 : 1, 0.1, delta);
-    // Pinned at 0.5 (half the plane's UV space) so every card renders as a full circle.
-    easing.damp(ref.current.material, "radius", 0.5, 0.2, delta);
-    easing.damp(ref.current.material, "zoom", hovered ? 1 : 1.15, 0.2, delta);
+    easing.damp3(groupRef.current.scale, hovered ? 1.15 : 1, 0.1, delta);
+    for (const ref of [frontRef, backRef]) {
+      // Pinned at 0.5 (half the plane's UV space) so every card renders as a full circle.
+      easing.damp(ref.current.material, "radius", 0.5, 0.2, delta);
+      // Kept near 1 so the whole square logo stays visible — a couple of the
+      // icons touch their canvas edges and were getting clipped at a heavier zoom.
+      easing.damp(ref.current.material, "zoom", hovered ? 1.05 : 1, 0.2, delta);
+    }
   });
   return (
-    // eslint-disable-next-line jsx-a11y/alt-text -- this is drei's <Image> (a Three.js mesh), not next/image
-    <Image
-      ref={ref}
-      url={url}
-      transparent
-      side={THREE.DoubleSide}
-      onPointerOver={pointerOver}
-      onPointerOut={pointerOut}
-      {...props}
-    >
-      <bentPlaneGeometry args={[0.1, 1, 1, 20, 20]} />
-    </Image>
+    <group ref={groupRef} {...props}>
+      {/*
+        Two front-only faces back-to-back instead of one DoubleSide plane:
+        a DoubleSide plane's back shows a horizontally-mirrored copy of the
+        texture, which read backwards through the ring's gaps once cards got
+        sparse enough to see through. Each face here only ever renders its
+        own, correctly oriented front — whichever currently faces the camera.
+      */}
+      {/* eslint-disable-next-line jsx-a11y/alt-text -- this is drei's <Image> (a Three.js mesh), not next/image */}
+      <Image
+        ref={frontRef}
+        url={url}
+        transparent
+        side={THREE.FrontSide}
+        onPointerOver={pointerOver}
+        onPointerOut={pointerOut}
+      >
+        <bentPlaneGeometry args={[0.1, 1, 1, 20, 20]} />
+      </Image>
+      {/* eslint-disable-next-line jsx-a11y/alt-text -- this is drei's <Image> (a Three.js mesh), not next/image */}
+      <Image
+        ref={backRef}
+        url={url}
+        transparent
+        side={THREE.FrontSide}
+        rotation={[0, Math.PI, 0]}
+        onPointerOver={pointerOver}
+        onPointerOut={pointerOut}
+      >
+        <bentPlaneGeometry args={[0.1, 1, 1, 20, 20]} />
+      </Image>
+    </group>
   );
 }
