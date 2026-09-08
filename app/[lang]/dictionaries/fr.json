@@ -1,39 +1,4 @@
 {
-  "nav": {
-    "brand": "Portfolio",
-    "home": "Accueil",
-    "about": "À propos",
-    "projects": "Projets",
-    "skills": "Compétences",
-    "contact": "Contact"
-  },
-  "home": {
-    "eyebrow": "Bienvenue",
-    "title": "Bonjour, je crée des projets sur le web.",
-    "description": "Ceci est le point de départ de mon portfolio. Découvrez mes projets, mes compétences et contactez-moi.",
-    "projectsCta": "Voir les projets",
-    "contactCta": "Me contacter",
-    "techTitle": "Technologies que j'utilise"
-  },
-  "about": {
-    "title": "À propos",
-    "description": "Une courte biographie ici — qui vous êtes, ce que vous faites et ce qui vous tient à cœur."
-  },
-  "projects": {
-    "title": "Projets",
-    "items": [
-      { "title": "Projet Un", "description": "Une brève description du projet ici." },
-      { "title": "Projet Deux", "description": "Une brève description du projet ici." }
-    ]
-  },
-  "skills": {
-    "title": "Compétences"
-  },
-  "contact": {
-    "title": "Contact",
-    "description": "Envie de me contacter ? Écrivez-moi à",
-    "email": "hello@example.com"
-  },
   "footer": {
     "brand": "Portfolio",
     "rights": "Tous droits réservés."

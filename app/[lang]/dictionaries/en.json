@@ -1,39 +1,4 @@
 {
-  "nav": {
-    "brand": "Portfolio",
-    "home": "Home",
-    "about": "About",
-    "projects": "Projects",
-    "skills": "Skills",
-    "contact": "Contact"
-  },
-  "home": {
-    "eyebrow": "Welcome",
-    "title": "Hi, I'm building things on the web.",
-    "description": "This is the starting point for my portfolio. Take a look at my projects, skills, and get in touch.",
-    "projectsCta": "View Projects",
-    "contactCta": "Contact Me",
-    "techTitle": "Technologies I work with"
-  },
-  "about": {
-    "title": "About",
-    "description": "A short bio goes here — who you are, what you do, and what you care about."
-  },
-  "projects": {
-    "title": "Projects",
-    "items": [
-      { "title": "Project One", "description": "A short description of the project goes here." },
-      { "title": "Project Two", "description": "A short description of the project goes here." }
-    ]
-  },
-  "skills": {
-    "title": "Skills"
-  },
-  "contact": {
-    "title": "Contact",
-    "description": "Want to get in touch? Reach out at",
-    "email": "hello@example.com"
-  },
   "footer": {
     "brand": "Portfolio",
     "rights": "All rights reserved."

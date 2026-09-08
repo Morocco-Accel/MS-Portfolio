@@ -4,67 +4,47 @@
 // Cards are swapped for circular technology badges (radius pinned to 0.5 = full circle).
 
 import * as THREE from "three";
-import { useMemo, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
   Canvas,
   useFrame,
   type ThreeElements,
   type ThreeEvent,
 } from "@react-three/fiber";
-import { Image, Environment, ScrollControls, useScroll } from "@react-three/drei";
+import { Image, Environment } from "@react-three/drei";
 import { easing } from "maath";
 import "./util";
-import type { MeshSineMaterial } from "./util";
 
 const TECHS = [
   "react",
   "next",
-  "type",
-  "tailwind",
   "angular",
-  "redux",
-  "zustand",
-  "query",
-  "rnative",
-  "nest",
-  "drf",
   "springboot",
-  "mongo",
-  "mysql",
-  "oracle",
-  "firebase",
-  "docker",
+  "nest",
   "git",
-  "github",
-  "gitlab",
-  "figma",
-  "material",
-  "chakra",
-  "ant",
-  "sass",
-  "i18",
+  "drf",
+  "tailwind",
+  "docker",
 ].map((name) => `/assets/tech/${name}.png`);
+
+const ROTATE_SPEED = 0.22; // radians/sec — one lap roughly every 28s
 
 export default function TechCarousel() {
   return (
     <Canvas camera={{ position: [0, 0, 100], fov: 15 }} gl={{ alpha: true }}>
       <fog attach="fog" args={["#a79", 8.5, 12]} />
-      <ScrollControls pages={4} infinite>
-        <Rig rotation={[0, 0, 0.15]}>
-          <Carousel />
-        </Rig>
-        <Banner position={[0, -0.15, 0]} />
-      </ScrollControls>
-      <Environment preset="dawn" background blur={0.5} />
+      <Rig rotation={[0, 0, 0.15]}>
+        <Carousel />
+      </Rig>
+      <Environment preset="dawn" blur={0.5} />
     </Canvas>
   );
 }
 
 function Rig(props: ThreeElements["group"]) {
   const ref = useRef<THREE.Group>(null!);
-  const scroll = useScroll();
   useFrame((state, delta) => {
-    ref.current.rotation.y = -scroll.offset * (Math.PI * 2); // Rotate contents
+    ref.current.rotation.y += delta * ROTATE_SPEED; // Auto-rotate contents
     state.events.update?.(); // Raycasts every frame rather than on pointer-move
     easing.damp3(
       state.camera.position,
@@ -78,7 +58,7 @@ function Rig(props: ThreeElements["group"]) {
 }
 
 function Carousel({
-  radius = 2.6,
+  radius = 1.9,
   count = TECHS.length,
 }: {
   radius?: number;
@@ -128,42 +108,4 @@ function Card({
       <bentPlaneGeometry args={[0.1, 1, 1, 20, 20]} />
     </Image>
   );
-}
-
-function Banner(props: ThreeElements["mesh"]) {
-  const ref = useRef<THREE.Mesh<THREE.BufferGeometry, MeshSineMaterial>>(null!);
-  const texture = useMemo(() => createBannerTexture("TECHNOLOGIES"), []);
-  const scroll = useScroll();
-  useFrame((state, delta) => {
-    ref.current.material.time.value += Math.abs(scroll.delta) * 4;
-    ref.current.material.map!.offset.x += delta / 2;
-  });
-  return (
-    <mesh ref={ref} {...props}>
-      <cylinderGeometry args={[1.6, 1.6, 0.14, 128, 16, true]} />
-      <meshSineMaterial
-        map={texture}
-        map-anisotropy={16}
-        map-repeat={[30, 1]}
-        side={THREE.DoubleSide}
-        toneMapped={false}
-      />
-    </mesh>
-  );
-}
-
-function createBannerTexture(label: string) {
-  const canvas = document.createElement("canvas");
-  canvas.width = 512;
-  canvas.height = 64;
-  const ctx = canvas.getContext("2d")!;
-  ctx.fillStyle = "#111111";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = "#ffffff";
-  ctx.font = "700 34px Arial, Helvetica, sans-serif";
-  ctx.textBaseline = "middle";
-  ctx.fillText(`${label}   •   `, 12, canvas.height / 2);
-  const texture = new THREE.CanvasTexture(canvas);
-  texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-  return texture;
 }
