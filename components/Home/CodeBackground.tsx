@@ -9,42 +9,64 @@ const FONT_SIZE = 15;
 const FONT = `${FONT_SIZE}px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace`;
 const GLOW_RADIUS = 240;
 
-type TypeSegment = { text: string; color: string };
+// A segment can be marked `rtl` — canvas fillText defaults to left-to-right
+// layout, which draws an RTL (Arabic) string back-to-front unless
+// ctx.direction is switched just for that segment's draw call.
+type TypeSegment = { text: string; color: string; rtl?: boolean };
+
+const NAMES: { text: string; rtl?: boolean }[] = [
+  { text: "Marouane Shaimi" },
+  { text: "مروان السحيمي", rtl: true },
+];
+
+// Wraps each name variant in one print-statement style, so every language
+// gets both a Latin and an Arabic line in the rotation.
+function withName(head: TypeSegment[], tail: TypeSegment[]): TypeSegment[][] {
+  return NAMES.map((name) => [
+    ...head,
+    { text: `"${name.text}"`, color: "#7ee787", rtl: name.rtl },
+    ...tail,
+  ]);
+}
 
 // A rotating pool of "print the name" one-liners across the stack's
-// languages, each colored like real syntax highlighting (class/function,
-// member, string) using the same rain palette.
+// languages, colored like real syntax highlighting (class/function, member,
+// string) using the same rain palette.
 const TYPE_LINES: TypeSegment[][] = [
-  [
-    { text: "System", color: "#79c0ff" },
-    { text: ".", color: "#e6edf3" },
-    { text: "out", color: "#a5d6ff" },
-    { text: ".", color: "#e6edf3" },
-    { text: "println", color: "#d2a8ff" },
-    { text: "(", color: "#e6edf3" },
-    { text: '"Marouane Shaimi"', color: "#7ee787" },
-    { text: ");", color: "#e6edf3" },
-  ],
-  [
-    { text: "console", color: "#79c0ff" },
-    { text: ".", color: "#e6edf3" },
-    { text: "log", color: "#d2a8ff" },
-    { text: "(", color: "#e6edf3" },
-    { text: '"Marouane Shaimi"', color: "#7ee787" },
-    { text: ");", color: "#e6edf3" },
-  ],
-  [
-    { text: "print", color: "#d2a8ff" },
-    { text: "(", color: "#e6edf3" },
-    { text: '"Marouane Shaimi"', color: "#7ee787" },
-    { text: ")", color: "#e6edf3" },
-  ],
-  [
-    { text: "printf", color: "#d2a8ff" },
-    { text: "(", color: "#e6edf3" },
-    { text: '"Marouane Shaimi\\n"', color: "#7ee787" },
-    { text: ");", color: "#e6edf3" },
-  ],
+  ...withName(
+    [
+      { text: "System", color: "#79c0ff" },
+      { text: ".", color: "#e6edf3" },
+      { text: "out", color: "#a5d6ff" },
+      { text: ".", color: "#e6edf3" },
+      { text: "println", color: "#d2a8ff" },
+      { text: "(", color: "#e6edf3" },
+    ],
+    [{ text: ");", color: "#e6edf3" }],
+  ),
+  ...withName(
+    [
+      { text: "console", color: "#79c0ff" },
+      { text: ".", color: "#e6edf3" },
+      { text: "log", color: "#d2a8ff" },
+      { text: "(", color: "#e6edf3" },
+    ],
+    [{ text: ");", color: "#e6edf3" }],
+  ),
+  ...withName(
+    [
+      { text: "print", color: "#d2a8ff" },
+      { text: "(", color: "#e6edf3" },
+    ],
+    [{ text: ")", color: "#e6edf3" }],
+  ),
+  ...withName(
+    [
+      { text: "printf", color: "#d2a8ff" },
+      { text: "(", color: "#e6edf3" },
+    ],
+    [{ text: ");", color: "#e6edf3" }],
+  ),
 ];
 const TYPE_MAX_FONT_SIZE = 16;
 const TYPE_SPEED = 13; // chars/sec while typing
@@ -125,6 +147,7 @@ export default function CodeBackground() {
 
     function drawTypeLine(count: number, blink: boolean) {
       ctx!.font = typeFont;
+      ctx!.textAlign = "left";
       ctx!.globalAlpha = 1;
 
       let remaining = count;
@@ -132,11 +155,13 @@ export default function CodeBackground() {
       for (const segment of currentLine) {
         if (remaining <= 0) break;
         const shown = segment.text.slice(0, Math.max(0, Math.floor(remaining)));
+        ctx!.direction = segment.rtl ? "rtl" : "ltr";
         ctx!.fillStyle = segment.color;
         ctx!.fillText(shown, x, currentY);
         x += ctx!.measureText(shown).width;
         remaining -= segment.text.length;
       }
+      ctx!.direction = "ltr";
 
       if (blink) {
         ctx!.fillStyle = "#e6edf3";

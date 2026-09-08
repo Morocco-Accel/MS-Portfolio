@@ -25,6 +25,8 @@ const TECHS = [
   "drf",
   "tailwind",
   "docker",
+  "firebase",
+  "github",
 ].map((name) => `/assets/tech/${name}.png`);
 
 const ROTATE_SPEED = 0.22; // radians/sec — one lap roughly every 28s
