@@ -2,5 +2,29 @@
   "footer": {
     "brand": "Portafolio",
     "rights": "Todos los derechos reservados."
+  },
+  "education": {
+    "eyebrow": "Educación",
+    "heading": "Trayectoria académica",
+    "items": [
+      {
+        "period": "20XX — 20XX",
+        "degree": "Nombre del título (pendiente)",
+        "school": "Nombre de la institución (pendiente)",
+        "description": "Añade una breve descripción del programa, la especialidad o los logros destacados."
+      },
+      {
+        "period": "20XX — 20XX",
+        "degree": "Nombre del título (pendiente)",
+        "school": "Nombre de la institución (pendiente)",
+        "description": "Añade una breve descripción del programa, la especialidad o los logros destacados."
+      },
+      {
+        "period": "20XX — 20XX",
+        "degree": "Nombre del título (pendiente)",
+        "school": "Nombre de la institución (pendiente)",
+        "description": "Añade una breve descripción del programa, la especialidad o los logros destacados."
+      }
+    ]
   }
 }

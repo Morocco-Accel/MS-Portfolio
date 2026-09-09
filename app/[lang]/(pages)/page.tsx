@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Home from "@/components/Home/Home";
-import { hasLocale } from "../dictionaries";
+import { getDictionary, hasLocale } from "../dictionaries";
 
 export default async function Page({
   params,
@@ -10,5 +10,7 @@ export default async function Page({
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
 
-  return <Home />;
+  const dict = await getDictionary(lang);
+
+  return <Home education={dict.education} />;
 }

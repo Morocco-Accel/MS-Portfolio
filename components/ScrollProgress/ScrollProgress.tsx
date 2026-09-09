@@ -2,8 +2,17 @@
 
 import { motion, useScroll, useSpring } from "motion/react";
 
-const RAINBOW =
-  "linear-gradient(90deg, #ff2d55, #ff9500, #ffcc00, #34c759, #00c7be, #007aff, #af52de, #ff2d55)";
+export const RAINBOW_COLORS = [
+  "#ff2d55",
+  "#ff9500",
+  "#ffcc00",
+  "#34c759",
+  "#00c7be",
+  "#007aff",
+  "#af52de",
+];
+
+const RAINBOW = `linear-gradient(90deg, ${[...RAINBOW_COLORS, RAINBOW_COLORS[0]].join(", ")})`;
 
 /**
  * Fixed reading-progress line: its length tracks how far down the page the

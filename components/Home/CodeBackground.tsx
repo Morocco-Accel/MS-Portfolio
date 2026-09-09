@@ -68,7 +68,7 @@ const TYPE_LINES: TypeSegment[][] = [
     [{ text: ");", color: "#e6edf3" }],
   ),
 ];
-const TYPE_MAX_FONT_SIZE = 16;
+const TYPE_MAX_FONT_SIZE = 12;
 const TYPE_SPEED = 13; // chars/sec while typing
 const ERASE_SPEED = 26; // chars/sec while erasing
 const HOLD_MS = 1700;
@@ -111,7 +111,7 @@ export default function CodeBackground() {
       drops = Array.from({ length: columns }, () => (Math.random() * -height) / FONT_SIZE);
       colors = Array.from({ length: columns }, () => PALETTE[Math.floor(Math.random() * PALETTE.length)]);
       // Scale the typed line to the container so it also fits the short footer strip.
-      typeFontSize = Math.max(9, Math.min(TYPE_MAX_FONT_SIZE, height * 0.2));
+      typeFontSize = Math.max(8, Math.min(TYPE_MAX_FONT_SIZE, height * 0.14));
       typeFont = `600 ${typeFontSize}px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace`;
     }
 
