@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
-import Home from "@/components/Home/Home";
-import { getDictionary, hasLocale } from "../dictionaries";
+import { hasLocale } from "../dictionaries";
 
 export default async function Page({
   params,
@@ -10,7 +9,5 @@ export default async function Page({
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
 
-  const dict = await getDictionary(lang);
-
-  return <Home education={dict.education} />;
+  return <main className="flex flex-1" />;
 }

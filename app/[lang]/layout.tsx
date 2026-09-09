@@ -1,12 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
-import Navbar from "@/components/Navbar/Navbar";
-import Footer from "@/components/Footer/Footer";
-import ScrollProgress from "@/components/ScrollProgress/ScrollProgress";
-import SmoothScroll from "@/components/SmoothScroll/SmoothScroll";
-import BackToTop from "@/components/BackToTop/BackToTop";
-import { getDictionary, hasLocale } from "./dictionaries";
+import { hasLocale } from "./dictionaries";
 import { locales, rtlLocales } from "@/i18n/config";
 import "../globals.css";
 
@@ -39,7 +34,6 @@ export default async function RootLayout({
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
 
-  const dict = await getDictionary(lang);
   const dir = rtlLocales.includes(lang) ? "rtl" : "ltr";
 
   return (
@@ -49,12 +43,7 @@ export default async function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-white">
-        <SmoothScroll />
-        <ScrollProgress />
-        <Navbar lang={lang} />
         <div className="flex flex-1 flex-col">{children}</div>
-        <Footer dict={dict.footer} />
-        <BackToTop />
       </body>
     </html>
   );
