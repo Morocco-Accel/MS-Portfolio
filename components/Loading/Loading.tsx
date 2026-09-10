@@ -153,7 +153,7 @@ export default function Loading() {
             {bgLines.map((line) => (
               <motion.span
                 key={line.text}
-                className="absolute inline-block overflow-hidden font-mono text-[10px] whitespace-nowrap text-white opacity-90 sm:text-xs"
+                className="absolute inline-block overflow-hidden text-[10px] whitespace-nowrap text-white opacity-90 sm:text-xs"
                 style={line.slot}
                 animate={{
                   width: [
