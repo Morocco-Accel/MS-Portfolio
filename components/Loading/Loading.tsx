@@ -24,7 +24,7 @@ const PERCENT_COLOR_PULSE = ["#ffffff", "#ffe4b8", "#e3b07d", "#ffffff"];
 const PRINT_LINES = [
   'console.log("Marouane Shaimi")',
   'System.out.println("Marouane Shaimi");',
-  'print("مروان الشايمي")',
+  'print("مروان السحيمي")',
   'printf("Marouane Shaimi\\n");',
   'puts "Marouane Shaimi"',
   'echo "Marouane Shaimi";',
@@ -153,7 +153,7 @@ export default function Loading() {
             {bgLines.map((line) => (
               <motion.span
                 key={line.text}
-                className="absolute inline-block overflow-hidden font-mono text-[10px] whitespace-nowrap text-white opacity-40 sm:text-xs"
+                className="absolute inline-block overflow-hidden font-mono text-[10px] whitespace-nowrap text-white opacity-90 sm:text-xs"
                 style={line.slot}
                 animate={{
                   width: [
