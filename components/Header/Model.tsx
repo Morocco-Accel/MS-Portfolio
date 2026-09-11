@@ -1,14 +1,77 @@
+"use client"
+
+import { useMemo, useState, type ComponentProps } from 'react'
 import * as THREE from 'three'
 import { GLTF } from 'three-stdlib'
-import { useGLTF } from '@react-three/drei'
+import { useFrame } from '@react-three/fiber'
+import { Outlines, useGLTF } from '@react-three/drei'
 
 type GLTFResult = GLTF & {
   nodes: { [name: string]: THREE.Mesh }
   materials: { [name: string]: THREE.Material }
 }
 
-export function Model(props: React.ComponentProps<'group'>) {
-  const { nodes, materials } = useGLTF('/assets/3D/HomeOffice.glb') as GLTFResult
+const HUE_CYCLE_SPEED = 0.5 // full rainbow revolutions per second
+const OUTLINE_THICKNESS_PX = 3 // constant on-screen width, regardless of the mesh's tiny world scale
+
+function ComputerScreen({
+  geometry,
+  material,
+  position,
+  scale,
+}: {
+  geometry: THREE.BufferGeometry
+  material: THREE.Material | THREE.Material[]
+  position: [number, number, number]
+  scale: [number, number, number]
+}) {
+  const [hovered, setHovered] = useState(false)
+  const [hue, setHue] = useState(0)
+
+  useFrame((state) => {
+    if (!hovered) return
+    setHue((state.clock.elapsedTime * HUE_CYCLE_SPEED) % 1)
+  })
+
+  const outlineColor = useMemo(
+    () => new THREE.Color().setHSL(hue, 1, 0.5),
+    [hue],
+  )
+
+  return (
+    <mesh
+      castShadow
+      receiveShadow
+      geometry={geometry}
+      material={material}
+      position={position}
+      scale={scale}
+      onPointerOver={(e) => {
+        e.stopPropagation()
+        setHovered(true)
+        document.body.style.cursor = 'pointer'
+      }}
+      onPointerOut={(e) => {
+        e.stopPropagation()
+        setHovered(false)
+        document.body.style.cursor = 'auto'
+      }}
+    >
+      {hovered && (
+        <Outlines
+          screenspace
+          thickness={OUTLINE_THICKNESS_PX}
+          color={outlineColor}
+          transparent
+          opacity={0.9}
+        />
+      )}
+    </mesh>
+  )
+}
+
+export function Model(props: ComponentProps<'group'>) {
+  const { nodes, materials } = useGLTF('/assets/3D/HomeOffice.glb') as unknown as GLTFResult
   return (
     <group {...props} dispose={null}>
       <mesh
@@ -517,9 +580,7 @@ export function Model(props: React.ComponentProps<'group'>) {
         rotation={[0, -Math.PI / 2, 0]}
         scale={0.071}
       />
-      <mesh
-        castShadow
-        receiveShadow
+      <ComputerScreen
         geometry={nodes.Cube004.geometry}
         material={nodes.Cube004.material}
         position={[6.264, 2.125, -4.367]}
